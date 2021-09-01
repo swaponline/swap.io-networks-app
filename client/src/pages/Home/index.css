@@ -1,0 +1,14 @@
+.container {
+    max-width: 670px;
+    width: 90%;
+    margin: auto;
+}
+.text-block {
+    font-size: 28px;
+    line-height: 38px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20% auto auto;
+    max-width: 450px;
+}
