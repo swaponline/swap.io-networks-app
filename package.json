@@ -4,7 +4,9 @@
   "description": "https://networks.swap.io",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "client": "cd client && npm start",
+    "start": "concurrently \"npm run dev\" \"npm run client\"",
     "build": "cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,6 +22,7 @@
   },
   "homepage": "https://github.com/swaponline/swap.io-networks-app#readme",
   "dependencies": {
+    "concurrently": "^6.2.1",
     "express": "^4.17.1"
   }
 }
