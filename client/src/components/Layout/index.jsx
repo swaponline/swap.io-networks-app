@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from "../Header";
-import './index.css';
+import './Layout.css';
 
 export default function Layout(props) {
   return (

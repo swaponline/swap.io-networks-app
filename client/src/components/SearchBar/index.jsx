@@ -1,15 +1,30 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import axios from 'axios';
-import {AutoComplete, Input, Select} from "antd";
-import './index.css';
+// import {AutoComplete, Input, Select} from "antd";
+import './SearchBar.css';
+
 import {SearchOutlined} from '@ant-design/icons';
-const { Option } = AutoComplete;
+import {Input} from "antd";
 
 let timeout;
+const suggestionList = [
+  "Alligator",
+  "Bask",
+  "Crocodilian",
+  "Death Roll",
+  "Eggs",
+  "Jaws",
+  "Reptile",
+  "Solitary",
+  "Tail",
+  "Wetlands"
+];
 
 export default function SearchBar() {
   const [value, setValue] = useState('');
-  const [options, setOptions] = useState([]);
+  const [hoveredSuggestion, setHoveredSuggestion] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [results, setResults] = useState([]);
 
   const getAllData = (URLs) => {
@@ -41,7 +56,7 @@ export default function SearchBar() {
           const res = resp.map((item, i) => {
             return {label: item.name, value: i}
           });
-          setOptions(res);
+          setSuggestions(res);
         })
         .catch(e=>{console.log(e)});
     }
@@ -55,27 +70,64 @@ export default function SearchBar() {
     }, 1000);
   };
 
-  const onSelect = (data) => {
-    console.log('onSelect', data);
+  const onSelect = e => {
+    console.log('onSelect', e.currentTarget.innerText);
+    setValue(e.currentTarget.innerText);
+    setShowSuggestions(false);
+  };
+
+  const onChange = e => {
+    const userInput = e.currentTarget.value;
+    console.log('change', userInput);
+
+    const suggestions = suggestionList.filter(
+      suggestion =>
+        suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+    );
+
+    setSuggestions(suggestions);
+    setShowSuggestions(true);
+    setValue(userInput);
+  };
+
+  const suggestionsListComponent = () => {
+    if (showSuggestions && value) {
+      if (suggestions.length) {
+        return <ul className="suggestions">
+            {suggestions.map((suggestion, index) => {
+              let className;
+
+              // Flag the active suggestion with a class
+              if (index === hoveredSuggestion) {
+                className = "suggestion-active";
+              }
+              return (
+                <li className={className} key={suggestion} onClick={onSelect}>
+                  {suggestion}
+                </li>
+              );
+            })}
+          </ul>
+      } else {
+        return <div className="no-suggestions">
+            <em>No suggestions available.</em>
+          </div>
+      }
+    }
+    return '';
   };
 
   return (
-    <Input.Group className='input-group'>
-      <SearchOutlined className='search-icon'/>
-      <AutoComplete
-        className='autocomplete-input'
-        placeholder="Search..."
-        options={options}
-        onSelect={onSelect}
-        onSearch={onSearch}
-      >
-      </AutoComplete>
-      <Select className='select-input' defaultValue="all">
-        <Option value="all">All</Option>
-        <Option value="token">Token</Option>
-        <Option value="blockchain">Blockchain</Option>
-      </Select>
-    </Input.Group>
-
+    <div>
+      <Input.Group className='input-group'>
+        <input
+          className='autocomplete-input'
+          type="text"
+          onChange={onChange}
+          value={value}
+        />
+      </Input.Group>
+      {suggestionsListComponent()}
+    </div>
   );
 }
