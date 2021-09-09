@@ -1,0 +1,19 @@
+.input-field {
+    border: 2px solid #E2E2E2;
+}
+.info-label {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.01em;
+    color: #919191;
+}
+.info-value {
+    font-size: 20px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    color: #101010;
+}

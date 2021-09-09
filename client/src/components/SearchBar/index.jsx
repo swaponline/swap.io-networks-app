@@ -1,10 +1,10 @@
 import React, {Fragment, useState} from 'react';
 import axios from 'axios';
-// import {AutoComplete, Input, Select} from "antd";
+import {Input, Select} from "antd";
 import './SearchBar.css';
 
-import {SearchOutlined} from '@ant-design/icons';
-import {Input} from "antd";
+import {SearchOutlined, CloseCircleFilled} from '@ant-design/icons';
+const {Option} = Select;
 
 let timeout;
 const suggestionList = [
@@ -20,7 +20,7 @@ const suggestionList = [
   "Wetlands"
 ];
 
-export default function SearchBar() {
+export default function SearchBar({setSelectedValue}) {
   const [value, setValue] = useState('');
   const [hoveredSuggestion, setHoveredSuggestion] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
@@ -50,12 +50,15 @@ export default function SearchBar() {
         pathList.push(path);
       });
       getAllData(pathList)
-        .then(resp=>{
-          console.log('respo',resp);
-          setResults(resp);
-          const res = resp.map((item, i) => {
-            return {label: item.name, value: i}
-          });
+        .then(res=>{
+          console.log('respo',res);
+          setResults(res);
+          // const res = resp.map((item, i) => {
+          //   return {label: item.name, value: i}
+          // });
+          setShowSuggestions(Boolean(value));
+          setValue(value);
+
           setSuggestions(res);
         })
         .catch(e=>{console.log(e)});
@@ -71,39 +74,47 @@ export default function SearchBar() {
   };
 
   const onSelect = e => {
-    console.log('onSelect', e.currentTarget.innerText);
+    const selected = suggestions.find(item => item.name === e.currentTarget.innerText);
+    console.log('onSelect', e.currentTarget.innerText, selected);
+
+    setSelectedValue(selected);
     setValue(e.currentTarget.innerText);
     setShowSuggestions(false);
   };
 
   const onChange = e => {
     const userInput = e.currentTarget.value;
-    console.log('change', userInput);
 
-    const suggestions = suggestionList.filter(
-      suggestion =>
-        suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-    );
+    onSearch(userInput);
+    // const suggestions = suggestionList.filter(
+    //   suggestion =>
+    //     suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+    // );
 
-    setSuggestions(suggestions);
-    setShowSuggestions(true);
+    // setSuggestions(suggestions);
+    // setShowSuggestions(Boolean(userInput));
     setValue(userInput);
+  };
+
+  const clearInput = () => {
+    setShowSuggestions(false);
+    setValue('');
+    setSelectedValue(null);
   };
 
   const suggestionsListComponent = () => {
     if (showSuggestions && value) {
       if (suggestions.length) {
-        return <ul className="suggestions">
+        return <ul className={`suggestions ${showSuggestions && 'show-suggestions-dropdown'}`}>
             {suggestions.map((suggestion, index) => {
+              console.log('suggestion', suggestion);
               let className;
-
-              // Flag the active suggestion with a class
               if (index === hoveredSuggestion) {
                 className = "suggestion-active";
               }
               return (
-                <li className={className} key={suggestion} onClick={onSelect}>
-                  {suggestion}
+                <li className={className} key={suggestion.name} onClick={onSelect}>
+                  <SearchOutlined className='search-icon'/>{suggestion.name}
                 </li>
               );
             })}
@@ -118,14 +129,26 @@ export default function SearchBar() {
   };
 
   return (
-    <div>
-      <Input.Group className='input-group'>
-        <input
+    <div className='input-container'>
+      <Input.Group className={`input-group ${showSuggestions && 'show-suggestions-input'}`}>
+        <SearchOutlined className='search-icon'/>
+        <Input
           className='autocomplete-input'
           type="text"
           onChange={onChange}
           value={value}
+          suffix={
+            <CloseCircleFilled
+              className='close-icon'
+              onClick={clearInput}
+            />
+          }
         />
+        <Select className='select-input' value='All'>
+          <Option>All</Option>
+          <Option>Blockchain</Option>
+          <Option>Token</Option>
+        </Select>
       </Input.Group>
       {suggestionsListComponent()}
     </div>
