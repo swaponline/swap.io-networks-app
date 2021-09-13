@@ -1,0 +1,37 @@
+.tabs-block{
+	align-items: stretch;
+	display: flex;
+	flex-direction: row;
+	height: 60px;
+	margin: 14px 0;
+}
+
+.tab{
+	flex: 1;
+	height: 100%;
+}
+
+.tab button{
+	border: none;
+	border-bottom: solid #DAD5E2;
+	cursor: pointer;
+	font-weight: 800;
+	height: 100%;
+	width: 100%;
+}
+
+.tab button:hover,
+.tab button.selected {
+	border-bottom: solid #864EE4;
+}
+
+
+
+.tab .left-button{
+	border-top-left-radius: 12px;
+}
+
+.tab .right-button{
+	border-top-right-radius: 12px;
+}
+

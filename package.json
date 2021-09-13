@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/swaponline/swap.io-networks-app#readme",
   "dependencies": {
+    "ant-design": "^1.0.0",
     "concurrently": "^6.2.1",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "react-scripts": "^4.0.3"
   }
 }
