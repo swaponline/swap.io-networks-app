@@ -31,7 +31,7 @@ const handlerFn = () => {
         });
         const modifiedContent = {
           ...parsedContent,
-          isToken: parsedContent.logo && parsedContent.logo.includes('tokens')
+          isToken: parsedContent.logo ? parsedContent.logo.includes('tokens') : false
         };
         bulk.push(modifiedContent);
 
