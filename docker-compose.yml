@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: './client/Dockerfile'
+    ports:
+      - '127.0.0.1:${PORT}:80'
+    command: ['nginx', '-g', 'daemon off;']
+  backend:
+    build:
+      context: .
+      dockerfile: './server/Dockerfile'
+    command: ['node', 'index.js']

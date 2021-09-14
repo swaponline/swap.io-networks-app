@@ -1,0 +1,32 @@
+.header {
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 30px;
+  align-items: center;
+}
+.header-title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  margin-left: 20px;
+}
+.left {
+  display: flex;
+  align-items: center;
+}
+.github-button {
+  background: #F6F6F6;
+  border-radius: 4px;
+  padding: 9px 32px;
+  color: #101010;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.github-button svg {
+  margin-right: 6px;
+}

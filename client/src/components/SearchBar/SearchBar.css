@@ -1,0 +1,91 @@
+.input-container {
+    position: relative;
+    z-index: 1;
+}
+.input-group {
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    height: 64px;
+    padding: 0px 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+}
+
+.autocomplete-input {
+    width: 80%;
+    border: none;
+    box-shadow: none;
+}
+.autocomplete-input:focus-visible {
+    outline: none;
+}
+.select-input {
+    width: 20%;
+    outline: none;
+    box-shadow: none;
+}
+.autocomplete-input.ant-select:not(.ant-select-customize-input) .ant-select-selector, .select-input.ant-select:not(.ant-select-customize-input) .ant-select-selector, .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector  {
+    border: none;
+    font-size: 16px;
+    line-height: 22px;
+    align-items: center;
+    outline: none;
+    box-shadow: none;
+}
+.search-icon {
+    font-size: 16px;
+    color: #909090;
+    margin-right: 18px;
+}
+.close-icon {
+    font-size: 16px;
+    color: #D0D0D0;
+    cursor: pointer;
+}
+.close-icon:hover {
+    color: #909090;
+}
+
+.no-suggestions {
+    color: #999;
+    padding: 0.5rem;
+}
+
+.suggestions {
+    box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    border-radius: 12px;
+    width: 100%;
+    border-top-width: 0;
+    list-style: none;
+    margin-top: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-inline-start: 0px;
+    position: relative;
+}
+.show-suggestions-input {
+    box-shadow: none;
+    border-radius: 12px 12px 0 0;
+}
+.show-suggestions-dropdown {
+    border-radius: 0 0 12px 12px;
+}
+
+.suggestions li {
+    padding: 9px 20px;
+}
+
+.suggestion-active,
+.suggestions li:hover {
+    background-color: #F6F6F6;
+    cursor: pointer;
+}
+
+.suggestions li:not(:last-of-type) {
+    /*border-bottom: 1px solid #999;*/
+}
+

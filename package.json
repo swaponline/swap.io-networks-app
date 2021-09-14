@@ -1,0 +1,30 @@
+{
+  "name": "swap.io-networks-app",
+  "version": "1.0.0",
+  "description": "https://networks.swap.io",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server/index.js",
+    "client": "cd client && npm start",
+    "start": "concurrently \"npm run dev\" \"npm run client\"",
+    "build": "cd client && npm install && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swaponline/swap.io-networks-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swaponline/swap.io-networks-app/issues"
+  },
+  "homepage": "https://github.com/swaponline/swap.io-networks-app#readme",
+  "dependencies": {
+    "ant-design": "^1.0.0",
+    "concurrently": "^6.2.1",
+    "express": "^4.17.1",
+    "react-scripts": "^4.0.3"
+  }
+}

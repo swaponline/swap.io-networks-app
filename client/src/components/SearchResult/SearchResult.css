@@ -1,0 +1,88 @@
+.info-field{
+    background: #F6F6F6;
+    border-radius: 8px;
+    margin: 14px 0;
+    padding: 6px 15px;
+}
+.logo-field {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo-field img {
+    height: 46px;
+    width: 46px;
+    margin-right: 14px;
+}
+.logo-field span {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #919191;
+    margin-right: 10px;
+}
+.code-field {
+    background: #F6F6F6;
+    border-radius: 8px;
+    margin: 14px 0;
+    padding: 20px;
+}
+.code-field .github-url {
+    margin-left: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    text-decoration-line: underline;
+    color: #919191;
+}
+
+
+/*Style the input in the test tab*/
+.test-select .ant-select .ant-select-selector{
+    border: none;
+}
+
+.test-select .ant-select.ant-select-single.ant-select-show-arrow,
+.test-input,
+.info-field textarea{
+    border: none;
+    width: 100%;
+}
+
+.test-button{
+    background: #EFEFEF;
+    border: none;
+    border-radius:  8px;
+    cursor: pointer;
+    font-weight: 700;
+    height: 5vh;
+    width: 100%;
+}
+
+.test-select .ant-select .ant-select-selector,
+.test-input,
+textarea{
+    background-color: transparent;
+    outline: none;
+}
+
+.test-input,
+textarea{
+ 
+}
+
+.code-editor{
+    background-color: #EFEFEF;
+    border-radius: 8px;
+    margin: 14px 0;
+}
+
+.test-mode hr{
+    border: 1px solid #EFEFEF;
+    margin: 28px 0;
+}
+
+
