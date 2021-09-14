@@ -1,4 +1,4 @@
-.info-field {
+.info-field{
     background: #F6F6F6;
     border-radius: 8px;
     margin: 14px 0;
@@ -38,3 +38,51 @@
     text-decoration-line: underline;
     color: #919191;
 }
+
+
+/*Style the input in the test tab*/
+.test-select .ant-select .ant-select-selector{
+    border: none;
+}
+
+.test-select .ant-select.ant-select-single.ant-select-show-arrow,
+.test-input,
+.info-field textarea{
+    border: none;
+    width: 100%;
+}
+
+.test-button{
+    background: #EFEFEF;
+    border: none;
+    border-radius:  8px;
+    cursor: pointer;
+    font-weight: 700;
+    height: 5vh;
+    width: 100%;
+}
+
+.test-select .ant-select .ant-select-selector,
+.test-input,
+textarea{
+    background-color: transparent;
+    outline: none;
+}
+
+.test-input,
+textarea{
+ 
+}
+
+.code-editor{
+    background-color: #EFEFEF;
+    border-radius: 8px;
+    margin: 14px 0;
+}
+
+.test-mode hr{
+    border: 1px solid #EFEFEF;
+    margin: 28px 0;
+}
+
+
