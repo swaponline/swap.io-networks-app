@@ -7,18 +7,6 @@ import {SearchOutlined, CloseCircleFilled} from '@ant-design/icons';
 const {Option} = Select;
 
 let timeout;
-const suggestionList = [
-  "Alligator",
-  "Bask",
-  "Crocodilian",
-  "Death Roll",
-  "Eggs",
-  "Jaws",
-  "Reptile",
-  "Solitary",
-  "Tail",
-  "Wetlands"
-];
 
 export default function SearchBar({setSelectedValue}) {
   const [value, setValue] = useState('');

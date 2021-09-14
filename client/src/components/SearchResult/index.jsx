@@ -15,14 +15,8 @@ export default function SearchResult({selectedValue}) {
   const {name, network, address, symbol, decimals, isTestnet, logo} = selectedValue;
   const logoUrl = `https://raw.githubusercontent.com/swaponline/swap.io-networks/main${logo}`;
   const code = JSON.stringify(selectedValue, null, 4);
-  const pathUrl = logo.replace('logo.png', 'info.json');
+  const pathUrl = logo?.replace('logo.png', 'info.json');
   const path = `https://github.com/swaponline/swap.io-networks/tree/main${pathUrl}`;
-  // const code = `function add(a, b) {
-  //   return a + b;
-  // }
-  //
-  // const a = 123;
-  // `;
 
   const hightlightWithLineNumbers = (input, language) =>
     highlight(input, Prism.languages.javascript, 'javascript')
