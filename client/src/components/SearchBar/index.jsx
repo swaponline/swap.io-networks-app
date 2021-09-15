@@ -1,108 +1,122 @@
-import React, {Fragment, useState} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
-import {Input, Select} from "antd";
+import {Input, Select, Spin} from "antd";
 import './SearchBar.css';
 
 import {SearchOutlined, CloseCircleFilled} from '@ant-design/icons';
+import LoadingOutlined from "@ant-design/icons/lib/icons/LoadingOutlined";
 const {Option} = Select;
 
 let timeout;
 
 export default function SearchBar({setSelectedValue}) {
-  const [value, setValue] = useState('');
+  const [searchText, setSearchText] = useState(null);
+  const [filter, setFilter] = useState('all');
   const [hoveredSuggestion, setHoveredSuggestion] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const getAllData = (URLs) => {
-    return Promise.all(URLs.map(fetchContent));
-  };
+  // const getAllData = (URLs) => {
+  //   return Promise.all(URLs.map(fetchContent));
+  // };
+  //
+  // const fetchContent = (URL) => {
+  //   return axios
+  //     .get(URL)
+  //     .then(function(response) {
+  //       return response.data;
+  //     });
+  // };
+  //
+  // const searchGithub = async (value) => {
+  //   const res = await axios.get(`https://api.github.com/search/code?q=${value}+in:file+user:swaponline+repo:swaponline/swap.io-networks`);
+  //   if (res) {
+  //     const {data} = res;
+  //     const {items} = data;
+  //     let pathList = [];
+  //     await items.map(item => {
+  //       const path = `https://raw.githubusercontent.com/swaponline/swap.io-networks/main/${item.path}`;
+  //       pathList.push(path);
+  //     });
+  //     getAllData(pathList)
+  //       .then(res=>{
+  //         console.log('respo',res);
+  //         setResults(res);
+  //         // const res = resp.map((item, i) => {
+  //         //   return {label: item.name, value: i}
+  //         // });
+  //         setShowSuggestions(Boolean(value));
+  //         setSearchText(value);
+  //
+  //         setSuggestions(res);
+  //       })
+  //       .catch(e=>{console.log(e)});
+  //   }
+  // };
 
-  const fetchContent = (URL) => {
-    return axios
-      .get(URL)
-      .then(function(response) {
-        return response.data;
-      });
-  };
-
-  const searchGithub = async (value) => {
-    const res = await axios.get(`https://api.github.com/search/code?q=${value}+in:file+user:swaponline+repo:swaponline/swap.io-networks`);
+  const searchNetwork = async (q, type) => {
+    const res = await axios.get(`/search?q=${q}&type=${type}`);
+    setLoading(false);
     if (res) {
       const {data} = res;
-      const {items} = data;
-      let pathList = [];
-      await items.map(item => {
-        const path = `https://raw.githubusercontent.com/swaponline/swap.io-networks/main/${item.path}`;
-        pathList.push(path);
-      });
-      getAllData(pathList)
-        .then(res=>{
-          console.log('respo',res);
-          setResults(res);
-          // const res = resp.map((item, i) => {
-          //   return {label: item.name, value: i}
-          // });
-          setShowSuggestions(Boolean(value));
-          setValue(value);
-
-          setSuggestions(res);
-        })
-        .catch(e=>{console.log(e)});
+      setSuggestions(data);
+      setShowSuggestions(Boolean(q));
     }
   };
-  const onSearch = (searchText) => {
+
+  const onSearch = (input, type) => {
     clearTimeout(timeout);
+    setLoading(true);
     timeout = setTimeout(() => {
-      if (searchText) {
-        searchGithub(searchText);
+      if (input) {
+        searchNetwork(input, type);
       }
     }, 1000);
   };
 
-  const onSelect = e => {
-    const selected = suggestions.find(item => item.name === e.currentTarget.innerText);
-    console.log('onSelect', e.currentTarget.innerText, selected);
-
-    setSelectedValue(selected);
-    setValue(e.currentTarget.innerText);
+  const onSelect = suggestion => {
+    setSelectedValue(suggestion);
     setShowSuggestions(false);
   };
 
-  const onChange = e => {
+  const onInputChange = e => {
     const userInput = e.currentTarget.value;
 
-    onSearch(userInput);
-    // const suggestions = suggestionList.filter(
-    //   suggestion =>
-    //     suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-    // );
-
-    // setSuggestions(suggestions);
-    // setShowSuggestions(Boolean(userInput));
-    setValue(userInput);
+    setSearchText(userInput);
+    onSearch(userInput, filter);
   };
+
+  function handleSelectType(value) {
+    setFilter(value);
+    onSearch(searchText, value);
+  }
 
   const clearInput = () => {
     setShowSuggestions(false);
-    setValue('');
+    setSearchText('');
     setSelectedValue(null);
+    setLoading(false);
   };
 
   const suggestionsListComponent = () => {
-    if (showSuggestions && value) {
+    console.log('suggestions', suggestions);
+    if (showSuggestions && searchText) {
       if (suggestions.length) {
         return <ul className={`suggestions ${showSuggestions && 'show-suggestions-dropdown'}`}>
             {suggestions.map((suggestion, index) => {
-              console.log('suggestion', suggestion);
+              const {name, isToken, symbol} = suggestion._source;
+              const id = suggestion._id;
               let className;
               if (index === hoveredSuggestion) {
                 className = "suggestion-active";
               }
               return (
-                <li className={className} key={suggestion.name} onClick={onSelect}>
-                  <SearchOutlined className='search-icon'/>{suggestion.name}
+                <li className={`suggestion ${className}`} key={id} onClick={() => onSelect(suggestion)}>
+                  <SearchOutlined className='search-icon'/>
+                  {name}
+                  {isToken && ` / ${symbol}`}
+                  <span>{isToken ? 'Coin': 'Network'}</span>
                 </li>
               );
             })}
@@ -119,12 +133,12 @@ export default function SearchBar({setSelectedValue}) {
   return (
     <div className='input-container'>
       <Input.Group className={`input-group ${showSuggestions && 'show-suggestions-input'}`}>
-        <SearchOutlined className='search-icon'/>
+        {loading ? <Spin className='search-icon' indicator={<LoadingOutlined />}/> : <SearchOutlined className='search-icon'/> }
         <Input
           className='autocomplete-input'
           type="text"
-          onChange={onChange}
-          value={value}
+          onChange={onInputChange}
+          value={searchText}
           suffix={
             <CloseCircleFilled
               className='close-icon'
@@ -132,10 +146,10 @@ export default function SearchBar({setSelectedValue}) {
             />
           }
         />
-        <Select className='select-input' value='All'>
-          <Option>All</Option>
-          <Option>Blockchain</Option>
-          <Option>Token</Option>
+        <Select className='select-input' value={filter} onChange={handleSelectType}>
+          <Option value='all'>All</Option>
+          <Option value='blockchain'>Blockchain</Option>
+          <Option value='token'>Token</Option>
         </Select>
       </Input.Group>
       {suggestionsListComponent()}

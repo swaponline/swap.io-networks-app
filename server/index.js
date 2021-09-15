@@ -1,9 +1,9 @@
 const {fetchInfo} = require('./github');
 const express = require("express");
-const { Client } = require('@elastic/elasticsearch');
-const client = new Client({ node: `http://localhost:9200` });
-
 const PORT = process.env.PORT || 3001;
+
+const {Client} = require('@elastic/elasticsearch');
+const client = new Client({node: `http://localhost:9200`});
 
 const app = express();
 
@@ -14,8 +14,9 @@ app.get('/search', function (req, res) {
   const type = req.query['type'];
   const isToken = type === 'token' ? true : type === 'blockchain' ? false : undefined;
 
+  console.log('q', q);
   const filter = () => {
-    if(isToken === undefined){
+    if (isToken === undefined) {
       return {
         terms: {
           isToken: [true, false]
@@ -48,7 +49,7 @@ app.get('/search', function (req, res) {
     }
   };
   client
-    .search({ index: 'networks_index', body: body, type: 'networks_list' })
+    .search({index: 'networks_index', body: body, type: 'networks_list'})
     .then((results) => {
       res.send(results.body.hits.hits);
     })

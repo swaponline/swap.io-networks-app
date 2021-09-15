@@ -75,8 +75,14 @@
     border-radius: 0 0 12px 12px;
 }
 
-.suggestions li {
+.suggestion {
     padding: 9px 20px;
+}
+.suggestion span {
+    font-size: 12px;
+    line-height: 16px;
+    color: #919191;
+    margin-left: 8px;
 }
 
 .suggestion-active,

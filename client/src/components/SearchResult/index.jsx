@@ -22,7 +22,7 @@ export default function SearchResult({selectedValue}) {
 
 
   console.log('Search result selected', selectedValue);
-  const {name, network, address, symbol, decimals, isTestnet, logo} = selectedValue;
+  const {name, network, address, symbol, decimals, isTestnet, logo} = selectedValue?._source;
   const logoUrl = `https://raw.githubusercontent.com/swaponline/swap.io-networks/main${logo}`;
   const code = JSON.stringify(selectedValue, null, 4);
   const pathUrl = logo?.replace('logo.png', 'info.json');
