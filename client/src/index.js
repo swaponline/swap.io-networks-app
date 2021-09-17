@@ -5,7 +5,7 @@ import './index.css';
 import App from './App.jsx';
 import reportWebVitals from './reportWebVitals';
 import CryptoInterface from './swap.io-keys/src/crypto/interface'
-
+console.log('>>> CryptoInterface', CryptoInterface)
 
 ReactDOM.render(
   <React.StrictMode>
