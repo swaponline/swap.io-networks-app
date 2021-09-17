@@ -28,7 +28,7 @@ export default function SearchResult({selectedValue}) {
   const pathUrl = logo?.replace('logo.png', 'info.json');
   const path = `https://github.com/swaponline/swap.io-networks/tree/main${pathUrl}`;
 
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
   const [showInfo, setShowInfo] = useState(true);
 
 
@@ -49,19 +49,19 @@ export default function SearchResult({selectedValue}) {
   const renderInfo = () => {
     return (
       <React.Fragment>
-        <div className='info-field logo-field' style={{backgroundColor: darkMode ? 'white' : '#F6F6F6'}}>
+        <div className='info-field logo-field' style={{backgroundColor: darkMode && '#101010', color: darkMode && 'white'}}>
           <div><img alt='logo' src={logoUrl}/>Logo.svg</div>
-          <div><span>Dark mode</span><Switch size="small" onChange={()=>setDarkMode(!darkMode)} /></div>
+          <div><span>{darkMode ? 'On black': 'On white'}</span><Switch className='custom-switch' size="small" onChange={()=>setDarkMode(!darkMode)} /></div>
         </div>
 
-        {<Field label={'Name'} value={name} mode={darkMode}/>}
-        {network && <Field label={'Network'} value={network} mode={darkMode}/>}
-        {address && <Field label={'Address'} value={address} mode={darkMode}/>}
-        {symbol && <Field label={'Symbol'} value={symbol} mode={darkMode}/>}
-        {isTestnet && <Field label={'Testnet'} value={isTestnet ? 'True' : 'False'} mode={darkMode}/>}
-        {decimals && <Field label={'Decimals'} value={decimals} mode={darkMode}/>}
+        {<Field label={'Name'} value={name} disabled/>}
+        {network && <Field label={'Network'} value={network} disabled/>}
+        {address && <Field label={'Address'} value={address} disabled/>}
+        {symbol && <Field label={'Symbol'} value={symbol} disabled/>}
+        {isTestnet && <Field label={'Testnet'} value={isTestnet ? 'True' : 'False'} disabled/>}
+        {decimals && <Field label={'Decimals'} value={decimals} disabled/>}
 
-        <div className='code-field' style={{backgroundColor: darkMode ? 'white' : '#F6F6F6'}}>
+        <div className='code-field' style={{backgroundColor: '#F6F6F6'}}>
           <div>
             <GithubLogo/>
             <a href={path} target="_blank" className='github-url'>{name}</a>
@@ -110,7 +110,7 @@ export default function SearchResult({selectedValue}) {
     return (
       <React.Fragment>
 
-        <Field label="Select function"  mode={darkMode}>
+        <Field label="Select function" >
           <div className="test-select">
             <Select value={functionSelect} onChange={(e)=>setFunctionSelect(e)} >
               <Option value="createAddress">createAddress()</Option>
@@ -121,13 +121,13 @@ export default function SearchResult({selectedValue}) {
         </Field>
 
 
-        <Field label="Mnemoic phrase" mode={darkMode}>
+        <Field label="Mnemoic phrase">
           <input value={mnemoic} className="test-input" onChange={(e)=>setMnemoic(e.target.value)}/>
         </Field>
 
         <hr />
 
-        <Field label="Address template" mode={darkMode}>
+        <Field label="Address template">
           <div className="test-select">
             <Select value={addressTemplate} onChange={(e)=>setAddressTemplate(e)} >
               <Option value="bip44">bip44</Option>
@@ -137,7 +137,7 @@ export default function SearchResult({selectedValue}) {
           </div>
         </Field>
 
-        <Field label="Original number of the address" mode={darkMode}>
+        <Field label="Original number of the address">
           <div className="test-select">
             <Select value={originalNumber} onChange={(e)=>setOriginalNumber(e)} >
               <Option value="1">1</Option>
@@ -147,27 +147,27 @@ export default function SearchResult({selectedValue}) {
           </div>
         </Field>
 
-        <Field label="Purpose" mode={darkMode}>
+        <Field label="Purpose" >
           <input value={purpose} className="test-input" onChange={(e)=>setPurpose(e.target.value)}/>
         </Field>
 
-        <Field label="ChainID" mode={darkMode}>
+        <Field label="ChainID">
           <input value={chainId} className="test-input" onChange={(e)=>setChainId(e.target.value)}/>
         </Field>
 
-        <Field label="Account" mode={darkMode}>
+        <Field label="Account">
           <input value={account} className="test-input" onChange={(e)=>setAccount(e.target.value)}/>
         </Field>
 
         <div style={{display: functionSelect === 'sign' ? "block" : "none"}}>
-          <Field label="Transaction hex" mode={darkMode}>
-            <textarea  value={txHex} onChange={(e)=>setTxHex(e.target.value)}></textarea>
+          <Field label="Transaction hex">
+            <textarea  value={txHex} onChange={(e)=>setTxHex(e.target.value)}/>
           </Field>
         </div>
 
         <div style={{display: functionSelect === 'signMessage' ? "block" : "none"}}>
-          <Field label="Enter message" mode={darkMode} onChange>
-            <textarea value={txMessage} onChange={(e)=>setTxMessage(e.target.value)}></textarea>
+          <Field label="Enter message" onChange>
+            <textarea value={txMessage} onChange={(e)=>setTxMessage(e.target.value)}/>
           </Field>
         </div>
         <hr />
