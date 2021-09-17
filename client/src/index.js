@@ -5,7 +5,18 @@ import './index.css';
 import App from './App.jsx';
 import reportWebVitals from './reportWebVitals';
 import CryptoInterface from './swap.io-keys/src/crypto/interface'
-console.log('>>> CryptoInterface', CryptoInterface)
+
+const cInterface = new CryptoInterface()
+const testMnemonic = "talk crisp crane dose network winner lumber harvest actual brand loud patch achieve army turtle warm section grab wish traffic anger steak rate square"
+cInterface
+  .createProfileFromMnemonic(
+    testMnemonic.split(` `), // mnemonic (array)
+    `` // password - use empty
+  )
+  .then((testProfile) => {
+    console.log('>>> testProfile', testProfile)
+  })
+
 
 ReactDOM.render(
   <React.StrictMode>
