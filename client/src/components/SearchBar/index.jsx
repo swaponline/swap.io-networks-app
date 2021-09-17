@@ -12,48 +12,9 @@ let timeout;
 export default function SearchBar({setSelectedValue}) {
   const [searchText, setSearchText] = useState(null);
   const [filter, setFilter] = useState('all');
-  const [hoveredSuggestion, setHoveredSuggestion] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // const getAllData = (URLs) => {
-  //   return Promise.all(URLs.map(fetchContent));
-  // };
-  //
-  // const fetchContent = (URL) => {
-  //   return axios
-  //     .get(URL)
-  //     .then(function(response) {
-  //       return response.data;
-  //     });
-  // };
-  //
-  // const searchGithub = async (value) => {
-  //   const res = await axios.get(`https://api.github.com/search/code?q=${value}+in:file+user:swaponline+repo:swaponline/swap.io-networks`);
-  //   if (res) {
-  //     const {data} = res;
-  //     const {items} = data;
-  //     let pathList = [];
-  //     await items.map(item => {
-  //       const path = `https://raw.githubusercontent.com/swaponline/swap.io-networks/main/${item.path}`;
-  //       pathList.push(path);
-  //     });
-  //     getAllData(pathList)
-  //       .then(res=>{
-  //         console.log('respo',res);
-  //         setResults(res);
-  //         // const res = resp.map((item, i) => {
-  //         //   return {label: item.name, value: i}
-  //         // });
-  //         setShowSuggestions(Boolean(value));
-  //         setSearchText(value);
-  //
-  //         setSuggestions(res);
-  //       })
-  //       .catch(e=>{console.log(e)});
-  //   }
-  // };
 
   const searchNetwork = async (q, type) => {
     const res = await axios.get(`/search?q=${q}&type=${type}`);
@@ -107,15 +68,11 @@ export default function SearchBar({setSelectedValue}) {
     if (showSuggestions && searchText) {
       if (suggestions.length) {
         return <ul className={`suggestions ${showSuggestions && 'show-suggestions-dropdown'}`}>
-            {suggestions.map((suggestion, index) => {
+            {suggestions.map((suggestion) => {
               const {name, isToken, symbol} = suggestion._source;
               const id = suggestion._id;
-              let className;
-              if (index === hoveredSuggestion) {
-                className = "suggestion-active";
-              }
               return (
-                <li className={`suggestion ${className}`} key={id} onClick={() => onSelect(suggestion)}>
+                <li className={`suggestion`} key={id} onClick={() => onSelect(suggestion)}>
                   <SearchOutlined className='search-icon'/>
                   {name}
                   {isToken && ` / ${symbol}`}
