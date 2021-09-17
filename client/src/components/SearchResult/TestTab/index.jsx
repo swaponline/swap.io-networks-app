@@ -10,6 +10,7 @@ import 'prismjs/components/prism-javascript';
 import "prismjs/themes/prism.css";
 
 import Field from "../../Field";
+import {createAddress} from "../../../assets/scripts/testFunctions";
 
 const {Option} = Select;
 
@@ -23,7 +24,7 @@ export default function TestTab({selectedValue}) {
 
 
   const [functionSelect, setFunctionSelect] = useState('createAddress()');
-  const [mnemoic, setMnemoic] = useState('...');
+  const [mnemonic, setMnemonic] = useState('...');
   const [addressTemplate, setAddressTemplate] = useState('bip44');
   const [originalNumber, setOriginalNumber] = useState(1);
   const [purpose, setPurpose] = useState(44);
@@ -62,7 +63,7 @@ export default function TestTab({selectedValue}) {
 
 
       <Field label="Mnemoic phrase">
-        <input value={mnemoic} className="test-input" onChange={(e) => setMnemoic(e.target.value)}/>
+        <input value={mnemonic} className="test-input" onChange={(e) => setMnemonic(e.target.value)}/>
       </Field>
 
       <hr/>
@@ -111,7 +112,7 @@ export default function TestTab({selectedValue}) {
         </Field>
       </div>
       <hr/>
-      <button className='test-button'>Test</button>
+      <button className='test-button' onClick={() => createAddress(mnemonic, addressTemplate, originalNumber, purpose, chainId)}>Test</button>
 
       <div className="code-editor">
         <Editor disabled value={testCode}
