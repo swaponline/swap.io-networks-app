@@ -8,6 +8,16 @@ This is a repository for a web based explorer of network, token, and coin defini
 
 ## Install
 
+### 1. Install docker
+
+See https://docs.docker.com/engine/install/
+
+### 2. Install docker-compose
+
+See https://docs.docker.com/compose/install/
+
+### 3. Clone and run the repo
+
 ```
 git clone https://github.com/swaponline/swap.io-networks-app.git
 cd swap.io-networks-app
