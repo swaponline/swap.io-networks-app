@@ -14,6 +14,9 @@ services:
       context: .
       dockerfile: './server/Dockerfile'
     command: ['node', 'index.js']
+    environment:
+      - ELASTICSEARCH_HOST=es01
+      - ELASTICSEARCH_PORT=9200
     depends_on:
     - es01
     - es02
@@ -34,7 +37,7 @@ services:
     volumes:
       - data01:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - "127.0.0.1:9200:9200"
   es02:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
     container_name: es02
