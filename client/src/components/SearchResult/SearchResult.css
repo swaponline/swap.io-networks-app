@@ -71,7 +71,7 @@ textarea{
 
 .test-input,
 textarea{
- 
+
 }
 
 .code-editor{
@@ -85,4 +85,7 @@ textarea{
     margin: 28px 0;
 }
 
+.custom-switch.ant-switch-checked {
+    background-color: #8618ff;
+}
 
