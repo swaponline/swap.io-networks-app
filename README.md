@@ -13,7 +13,7 @@ git clone https://github.com/swaponline/swap.io-networks-app.git
 cd swap.io-networks-app
 git submodule init
 git submodule update
-echo "PORT=PORT=8197" > .env
+echo "PORT=8197" > .env
 docker-compose up -d
 ```
 
