@@ -85,6 +85,9 @@ export default function SearchBar({setSelectedValue}) {
 
     setSearchText(userInput);
     onSearch(userInput, filter);
+    if (!userInput.length) {
+      clearInput();
+    }
   };
 
   function handleSelectType(value) {

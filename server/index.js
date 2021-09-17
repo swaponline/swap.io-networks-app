@@ -32,7 +32,10 @@ app.get('/search', function (req, res) {
   };
 
   const body = {
-    size: 50,
+    size: 500,
+    sort: {
+      priority: "asc"
+    },
     query: {
       bool: {
         must: {
@@ -43,12 +46,12 @@ app.get('/search', function (req, res) {
               "logo"
             ],
             query: q,
-            type : "phrase_prefix"
+            type : "phrase_prefix",
           }
         },
         filter: filter(),
       }
-    }
+    },
   };
   client
     .search({index: 'networks_index', body: body, type: 'networks_list'})
