@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Select} from "antd";
+import {Select, Modal} from "antd";
 
 import Editor from "react-simple-code-editor";
 import Prism from 'prismjs';
@@ -46,7 +46,34 @@ export default function TestTab({selectedValue}) {
           `)\nmessage='${txMessage}'\n)` : "))"
     }
 }
-    `
+    `;
+
+  const testCreateAddress = async () => {
+    console.log('selected value', selectedValue);
+    createAddress(selectedValue?._source.slug, mnemonic, addressTemplate, originalNumber, purpose, chainId, account)
+    .then(response => {
+      console.log('response', response);
+      const code = JSON.stringify(response, null, 4);
+      Modal.success({
+        title: 'Test passed!',
+        content: (
+          <Editor
+            disabled
+            highlight={() => hightlightWithLineNumbers(code, languages.js)}
+            value={code}
+            padding={10}
+          />
+        ),
+        onOk() {},
+      });
+    })
+      .catch(err => {
+        Modal.error({
+          title: 'Test failed!',
+          onOk() {},
+        })
+      })
+  };
 
   return (
     <React.Fragment>
@@ -112,7 +139,7 @@ export default function TestTab({selectedValue}) {
         </Field>
       </div>
       <hr/>
-      <button className='test-button' onClick={() => createAddress(mnemonic, addressTemplate, originalNumber, purpose, chainId)}>Test</button>
+      <button className='test-button' onClick={testCreateAddress}>Test</button>
 
       <div className="code-editor">
         <Editor disabled value={testCode}
