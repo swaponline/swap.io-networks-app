@@ -1,0 +1,6 @@
+[submodule "client/src/swap.io-keys"]
+	path = client/src/swap.io-keys
+	url = https://github.com/swaponline/swap.io-keys
+[submodule "client/public/swap.io-networks"]
+	path = client/public/swap.io-networks
+	url = https://github.com/swaponline/swap.io-networks

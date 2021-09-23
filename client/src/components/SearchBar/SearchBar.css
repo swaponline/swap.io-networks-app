@@ -85,7 +85,6 @@
     margin-left: 8px;
 }
 
-.suggestion-active,
 .suggestions li:hover {
     background-color: #F6F6F6;
     cursor: pointer;
