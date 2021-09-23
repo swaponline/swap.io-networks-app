@@ -23,7 +23,7 @@ export default function TestTab({selectedValue}) {
       .join("\n");
 
 
-  const [functionSelect, setFunctionSelect] = useState('createAddress()');
+  const [functionSelect, setFunctionSelect] = useState('createAddress');
   const [mnemonic, setMnemonic] = useState('...');
   const [addressTemplate, setAddressTemplate] = useState('bip44');
   const [originalNumber, setOriginalNumber] = useState(1);
@@ -48,12 +48,20 @@ export default function TestTab({selectedValue}) {
 }
     `;
 
-  const testCreateAddress = async () => {
-    console.log('selected value', selectedValue);
-    createAddress(selectedValue?._source.slug, mnemonic, addressTemplate, originalNumber, purpose, chainId, account)
-    .then(response => {
-      console.log('response', response);
-      const code = JSON.stringify(response, null, 4);
+  const test = async () => {
+    let res;
+    switch (functionSelect) {
+      case "createAddress":
+        res = await createAddress(selectedValue?._source.slug, mnemonic, addressTemplate, originalNumber, purpose, chainId, account);
+        break;
+      case "sign":
+        break;
+      case "signMessage":
+        break;
+    }
+    console.log('res', res);
+    if (res) {
+      const code = JSON.stringify(res, null, 4);
       Modal.success({
         title: 'Test passed!',
         content: (
@@ -66,13 +74,12 @@ export default function TestTab({selectedValue}) {
         ),
         onOk() {},
       });
-    })
-      .catch(err => {
-        Modal.error({
-          title: 'Test failed!',
-          onOk() {},
-        })
+    } else {
+      Modal.error({
+        title: 'Test failed!',
+        onOk() {},
       })
+    }
   };
 
   return (
@@ -139,7 +146,7 @@ export default function TestTab({selectedValue}) {
         </Field>
       </div>
       <hr/>
-      <button className='test-button' onClick={testCreateAddress}>Test</button>
+      <button className='test-button' onClick={test}>Test</button>
 
       <div className="code-editor">
         <Editor disabled value={testCode}
