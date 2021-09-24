@@ -26,13 +26,42 @@ const createIndex = (indexName) => {
 };
 
 const indexingData = async () => {
+  await deleteIndex('assets_index');
+  await deleteIndex('networks_index');
   await createIndex('networks_index');
+  await createIndex('assets_index');
   const bulk = [];
   let itemsProcessed = 0;
 
+  const assetsGroup = fs.readFileSync('networks/dist/mainnet/assets-groups.json', 'utf8');
+  const mockData = fs.readFileSync('server/mockAssets.json', 'utf8');
+  const data = assetsGroup ? assetsGroup : mockData;
+  const indexing = [];
+  let items = 0;
+  const parsedContent = JSON.parse(data);
+  parsedContent.map(asset => {
+    items++;
+    indexing.push({
+      index: {
+        _index: 'assets_index',
+        _type: 'assets_list',
+      },
+    });
+    indexing.push(asset);
+    if (items === parsedContent.length) {
+      client.bulk({body: indexing}, function (err, response) {
+        if (err) {
+          console.log('Failed bulk operation.', err);
+        } else {
+          console.log('Successfully', parsedContent.length);
+        }
+      });
+    }
+  });
+
   glob('networks/networks/**/info.json', async function (err, files) {
     files.forEach(file => {
-      fs.readFile(file, 'utf8',  (err, content) => {
+      fs.readFile(file, 'utf8', (err, content) => {
         itemsProcessed++;
         const parsedContent = JSON.parse(content);
         bulk.push({
@@ -48,7 +77,6 @@ const indexingData = async () => {
         bulk.push(modifiedContent);
 
         if (itemsProcessed === files.length) {
-          deleteIndex('networks_index');
           client.bulk({body: bulk}, function (err, response) {
             if (err) {
               console.log('Failed bulk operation.', err);
