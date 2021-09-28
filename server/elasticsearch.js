@@ -5,7 +5,11 @@ const client = new Client({node: `http://localhost:9200`});
 
 
 const deleteIndex = (indexName) => {
-  return client.indices.delete({index: indexName});
+  try {
+    return client.indices.delete({index: indexName});
+  } catch (err) {
+    return null;
+  }
 };
 
 const createIndex = (indexName) => {
