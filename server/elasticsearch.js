@@ -1,7 +1,9 @@
 const fs = require('fs');
 const glob = require("glob");
 const {Client} = require('@elastic/elasticsearch');
-const client = new Client({node: `http://localhost:9200`});
+
+const {ELASTICSEARCH_HOST, ELASTICSEARCH_PORT} = require('./constants');
+const client = new Client({node: `http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}`});
 
 
 const deleteIndex = (indexName) => {

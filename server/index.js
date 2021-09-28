@@ -1,9 +1,9 @@
 const {fetchInfo} = require('./github');
 const express = require("express");
-const PORT = process.env.PORT || 3001;
+const {PORT, ELASTICSEARCH_HOST, ELASTICSEARCH_PORT} = require('./constants');
 
 const {Client} = require('@elastic/elasticsearch');
-const client = new Client({node: `http://localhost:9200`});
+const client = new Client({node: `http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}`});
 
 const app = express();
 
