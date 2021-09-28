@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {Input, Select, Spin} from "antd";
+import {Button, Input, Select, Spin} from "antd";
 import './SearchBar.css';
 
 import {SearchOutlined, CloseCircleFilled} from '@ant-design/icons';
@@ -17,44 +17,6 @@ export default function SearchBar({setSelectedValue}) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // const getAllData = (URLs) => {
-  //   return Promise.all(URLs.map(fetchContent));
-  // };
-  //
-  // const fetchContent = (URL) => {
-  //   return axios
-  //     .get(URL)
-  //     .then(function(response) {
-  //       return response.data;
-  //     });
-  // };
-  //
-  // const searchGithub = async (value) => {
-  //   const res = await axios.get(`https://api.github.com/search/code?q=${value}+in:file+user:swaponline+repo:swaponline/swap.io-networks`);
-  //   if (res) {
-  //     const {data} = res;
-  //     const {items} = data;
-  //     let pathList = [];
-  //     await items.map(item => {
-  //       const path = `https://raw.githubusercontent.com/swaponline/swap.io-networks/main/${item.path}`;
-  //       pathList.push(path);
-  //     });
-  //     getAllData(pathList)
-  //       .then(res=>{
-  //         console.log('respo',res);
-  //         setResults(res);
-  //         // const res = resp.map((item, i) => {
-  //         //   return {label: item.name, value: i}
-  //         // });
-  //         setShowSuggestions(Boolean(value));
-  //         setSearchText(value);
-  //
-  //         setSuggestions(res);
-  //       })
-  //       .catch(e=>{console.log(e)});
-  //   }
-  // };
-
   const searchNetwork = async (q, type) => {
     const res = await axios.get(`/search?q=${q}&type=${type}`);
     setLoading(false);
@@ -65,12 +27,32 @@ export default function SearchBar({setSelectedValue}) {
     }
   };
 
+  const getPopularAssets = async () => {
+    const res = await axios.get(`/popular-assets`);
+    if (res) {
+      const {data} = res;
+      setSuggestions(data);
+      setShowSuggestions(true);
+    }
+  }
+
+  const searchAsset = async (q) => {
+    const res = await axios.get(`/search/assets?q=${q}`);
+    setLoading(false);
+    if (res) {
+      const {data} = res;
+      setSuggestions(data);
+      setShowSuggestions(true);
+    }
+  }
+
   const onSearch = (input, type) => {
     clearTimeout(timeout);
     setLoading(true);
     timeout = setTimeout(() => {
       if (input) {
-        searchNetwork(input, type);
+        // searchNetwork(input, type);
+        searchAsset(input);
       }
     }, 1000);
   };
@@ -103,8 +85,7 @@ export default function SearchBar({setSelectedValue}) {
   };
 
   const suggestionsListComponent = () => {
-    console.log('suggestions', suggestions);
-    if (showSuggestions && searchText) {
+    if (showSuggestions) {
       if (suggestions.length) {
         return <ul className={`suggestions ${showSuggestions && 'show-suggestions-dropdown'}`}>
             {suggestions.map((suggestion, index) => {
@@ -117,9 +98,9 @@ export default function SearchBar({setSelectedValue}) {
               return (
                 <li className={`suggestion ${className}`} key={id} onClick={() => onSelect(suggestion)}>
                   <SearchOutlined className='search-icon'/>
-                  {name}
-                  {isToken && ` / ${symbol}`}
-                  <span>{isToken ? 'Coin': 'Network'}</span>
+                  {symbol} / {name}
+                  {/*{isToken && ` / ${symbol}`}*/}
+                  {/*<span>{isToken ? 'Coin': 'Network'}</span>*/}
                 </li>
               );
             })}
@@ -149,6 +130,9 @@ export default function SearchBar({setSelectedValue}) {
             />
           }
         />
+        <Button
+          onClick={getPopularAssets}
+        >Popular assets</Button>
         <Select className='select-input' value={filter} onChange={handleSelectType}>
           <Option value='all'>All</Option>
           <Option value='blockchain'>Blockchain</Option>
