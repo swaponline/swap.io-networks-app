@@ -5,7 +5,7 @@ const repoURL = 'https://github.com/swaponline/swap.io-networks.git';
 const localPath = './networks';
 const options = ['--depth', '1'];
 
-const fetchInfo = async () => {
+const fetchInfo = () => {
   git.clone(repoURL, localPath, options, indexingData());
 };
 

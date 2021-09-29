@@ -5,42 +5,52 @@ const {Client} = require('@elastic/elasticsearch');
 const {ELASTICSEARCH_HOST, ELASTICSEARCH_PORT} = require('./constants');
 const client = new Client({node: `http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}`});
 
-
-const deleteIndex = (indexName) => {
-  try {
-    return client.indices.delete({index: indexName});
-  } catch (err) {
-    return null;
-  }
-};
-
-const createIndex = (indexName) => {
-  if (!client.indices.exists({index: indexName})) {
-    client.indices.create(
-      {
-        index: indexName,
-      },
-      function (error, response, status) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Created a new index.', response);
-        }
-      }
-    );
+const createIndex = async (indexName) => {
+  const isExist = await client.indices.exists({index: indexName});
+  console.log('Creating index...', indexName, isExist);
+  if (!isExist.body) {
+    return client.indices.create({index: indexName});
   }
 };
 
 const indexingData = async () => {
-  await deleteIndex('assets_index');
-  await deleteIndex('networks_index');
-  await createIndex('networks_index');
-  await createIndex('assets_index');
+  const isElasticReady = await checkConnection();
+  if (isElasticReady) {
+    await indexing();
+  }
+};
+
+const indexing = async () => {
+  try {
+    await client.indices.delete({
+      index: '_all'
+    });
+  } catch (err) {
+    console.error('ERROR deleting', err.message);
+  }
+
+  try {
+    await createIndex('assets_index');
+  } catch (err) {
+    console.log('Catching error create index', err);
+  }
+  try {
+    await createIndex('networks_index');
+  } catch (err) {
+    console.log('Catching error create index', err);
+  }
+
+
   const bulk = [];
   let itemsProcessed = 0;
-
-  const assetsGroup = fs.readFileSync('networks/dist/mainnet/assets-groups.json', 'utf8');
-  const mockData = fs.readFileSync('server/mockAssets.json', 'utf8');
+  const path = './networks/dist/mainnet/assets-groups.json';
+  let assetsGroup = null;
+  if (fs.existsSync(path)) {
+    assetsGroup = fs.readFileSync(path, 'utf8');
+  } else {
+    console.log("DOES NOT exist:", path);
+  }
+  const mockData = fs.readFileSync('./mockAssets.json', 'utf8');
   const data = assetsGroup ? assetsGroup : mockData;
   const indexing = [];
   let items = 0;
@@ -54,7 +64,9 @@ const indexingData = async () => {
       },
     });
     indexing.push(asset);
+    console.log('MAPPING', items, parsedContent.length, asset);
     if (items === parsedContent.length) {
+      console.log('CONTENT', indexing);
       client.bulk({body: indexing}, function (err, response) {
         if (err) {
           console.log('Failed bulk operation.', err);
@@ -65,36 +77,57 @@ const indexingData = async () => {
     }
   });
 
-  glob('networks/networks/**/info.json', async function (err, files) {
-    files.forEach(file => {
-      fs.readFile(file, 'utf8', (err, content) => {
-        itemsProcessed++;
-        const parsedContent = JSON.parse(content);
-        bulk.push({
-          index: {
-            _index: 'networks_index',
-            _type: 'networks_list',
-          },
-        });
-        const modifiedContent = {
-          ...parsedContent,
-          isToken: parsedContent.logo ? parsedContent.logo.includes('tokens') : false
-        };
-        bulk.push(modifiedContent);
-
-        if (itemsProcessed === files.length) {
-          client.bulk({body: bulk}, function (err, response) {
-            if (err) {
-              console.log('Failed bulk operation.', err);
-            } else {
-              console.log('Successfully imported %s', files.length);
-            }
-          });
-        }
-      });
-      if (err) return console.log(err);
-    })
-  });
+  // glob('networks/networks/**/info.json', async function (err, files) {
+  //   files.forEach(file => {
+  //     fs.readFile(file, 'utf8', (err, content) => {
+  //       itemsProcessed++;
+  //       const parsedContent = JSON.parse(content);
+  //       bulk.push({
+  //         index: {
+  //           _index: 'networks_index',
+  //           _type: 'networks_list',
+  //         },
+  //       });
+  //       const modifiedContent = {
+  //         ...parsedContent,
+  //         isToken: parsedContent.logo ? parsedContent.logo.includes('tokens') : false
+  //       };
+  //       bulk.push(modifiedContent);
+  //
+  //       if (itemsProcessed === files.length) {
+  //         client.bulk({body: bulk}, function (err, response) {
+  //           if (err) {
+  //             console.log('Failed bulk operation.', err);
+  //           } else {
+  //             console.log('Successfully imported %s', files.length);
+  //           }
+  //         });
+  //       }
+  //     });
+  //     if (err) return console.log(err);
+  //   })
+  // });
 };
 
+const checkConnection = () => {
+  return new Promise(async (resolve) => {
+    console.log("Checking connection to ElasticSearch...");
+
+    let isConnected = false;
+
+    while (!isConnected) {
+
+      try {
+        await client.cluster.health({});
+        console.log("Successfully connected to ElasticSearch");
+        isConnected = true;
+      } catch (_) {}
+    }
+
+    resolve(true);
+
+  });
+}
+
 exports.indexingData = indexingData;
+exports.checkConnection = checkConnection;
