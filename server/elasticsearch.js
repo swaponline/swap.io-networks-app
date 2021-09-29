@@ -64,9 +64,7 @@ const indexing = async () => {
       },
     });
     indexing.push(asset);
-    console.log('MAPPING', items, parsedContent.length, asset);
     if (items === parsedContent.length) {
-      console.log('CONTENT', indexing);
       client.bulk({body: indexing}, function (err, response) {
         if (err) {
           console.log('Failed bulk operation.', err);
