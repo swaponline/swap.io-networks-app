@@ -44,14 +44,17 @@ const indexing = async () => {
   const bulk = [];
   let itemsProcessed = 0;
   const path = './networks/dist/mainnet/assets-groups.json';
-  let assetsGroup = null;
+  const mockPath = './mockAssets.json';
+  let data = null;
   if (fs.existsSync(path)) {
-    assetsGroup = fs.readFileSync(path, 'utf8');
+    console.log('Assets exists');
+    data = fs.readFileSync(path, 'utf8');
+  } else if (fs.existsSync(mockPath)) {
+    console.log('Mocks exists');
+    data = fs.readFileSync(mockPath, 'utf8');
   } else {
     console.log("DOES NOT exist:", path);
   }
-  const mockData = fs.readFileSync('./mockAssets.json', 'utf8');
-  const data = assetsGroup ? assetsGroup : mockData;
   const indexing = [];
   let items = 0;
   const parsedContent = JSON.parse(data);
