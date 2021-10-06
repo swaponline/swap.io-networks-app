@@ -1,4 +1,4 @@
-const {fetchInfo} = require('./github');
+const {indexingData} = require('./elasticsearch');
 const express = require("express");
 const {PORT, ELASTICSEARCH_HOST, ELASTICSEARCH_PORT} = require('./constants');
 
@@ -7,7 +7,7 @@ const client = new Client({node: `http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_P
 
 const app = express();
 
-fetchInfo();
+indexingData()
 
 app.get('/search', function (req, res) {
   const q = req.query['q'] + '*';
