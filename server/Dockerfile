@@ -4,6 +4,8 @@ FROM node:${NODE_VERSION} AS build-stage
 #ENV NODE_ENV production
 RUN mkdir -p /app
 WORKDIR /app
+RUN git submodule init && git submodule update
+COPY swap.io-networks ./networks
 COPY client/package*.json ./
 RUN npm install
 COPY server .
