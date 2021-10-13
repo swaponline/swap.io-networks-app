@@ -66,8 +66,10 @@ app.get('/search', function (req, res) {
 });
 
 app.get('/popular-assets', function (req, res) {
+  const { from, size } = req.query
   const body = {
-    size: 500,
+    from: from || 0,
+    size: size || 500,
     sort: {
       priority: "asc"
     },
