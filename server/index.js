@@ -8,7 +8,9 @@ const {Client} = require('@elastic/elasticsearch');
 const client = new Client({node: `http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}`});
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 
 indexingData()
 
