@@ -22,13 +22,14 @@
   },
   "homepage": "https://github.com/swaponline/swap.io-networks-app#readme",
   "dependencies": {
-    "ant-design": "^1.0.0",
     "@elastic/elasticsearch": "^7.14.1",
+    "ant-design": "^1.0.0",
     "axios": "^0.21.4",
     "concurrently": "^6.2.1",
-    "react-scripts": "^4.0.3",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "glob": "^7.1.7",
+    "react-scripts": "^4.0.3",
     "simple-git": "^2.45.1"
   }
 }
