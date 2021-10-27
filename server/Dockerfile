@@ -5,7 +5,7 @@ FROM node:${NODE_VERSION} AS build-stage
 RUN mkdir -p /app
 WORKDIR /app
 COPY swap.io-networks ./networks
-COPY client/package*.json ./
+COPY package*.json ./
 RUN npm install
 COPY server .
 EXPOSE 3001
